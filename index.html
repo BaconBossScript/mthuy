@@ -362,7 +362,7 @@
 </head>
 <body>
 
-  <audio id="backgroundMusic" loop>
+  <audio id="backgroundMusic" loop preload="auto">
   <source src="https://raw.githubusercontent.com/BaconBossScript/mthuy/main/music.mp3" type="audio/mpeg">
   Trình duyệt của bạn không hỗ trợ audio
   </audio>
@@ -409,7 +409,18 @@
     const audio = document.getElementById('backgroundMusic');
 
     function handleHeartClick() {
-      audio.play().catch(error => console.log('Lỗi phát nhạc:', error));
+      audio.muted = false;
+
+      // Phát nhạc sau user interaction
+      const playPromise = audio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // Hiển thị nút play thủ công cho mobile
+          showManualPlayButton();
+        });
+      }
+
       heart.classList.add('fly-up');
       heartContainer.style.opacity = '0';
       setTimeout(() => {
